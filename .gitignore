@@ -1,0 +1,8 @@
+*.pyc
+*.o
+*.swp
+*.swo
+tags
+.DS_Store
+**/build/
+**/gmock/
