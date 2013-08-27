@@ -19,7 +19,7 @@ namespace HandTests {
     }
 
     TEST(Hand, parses_up_to_a_colon_as_player_name) {
-        std::basic_istringstream<char> iss { "copenhaver: " };
+        std::basic_istringstream<char> iss { "copenhaver:" };
 
         Hand h;
         iss >> h;
@@ -50,15 +50,20 @@ namespace HandTests {
         std::basic_istringstream<char> iss { "copenhaver: 2H 3S 4D 5C 6H\n"
                                              "rhoten: 7H 8S 9D JC QH\n" };
 
-        std::vector<Hand> hands{ 5 };
+        std::vector<Hand> hands { };
 
-        while(!iss.eof()) {
-            Hand h;
-            iss >> h;
+        Hand h;
+        while(Hand::read_hand(iss, h)) {
             hands.push_back(h);
         }
 
         ASSERT_EQ(2, hands.size());
+
+        EXPECT_EQ("copenhaver", hands[0].player());
+        EXPECT_EQ(5, hands[0].cards().size());
+
+        EXPECT_EQ("rhoten", hands[1].player());
+        EXPECT_EQ(5, hands[1].cards().size());
     }
 
 }

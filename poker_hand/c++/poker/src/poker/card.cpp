@@ -4,7 +4,6 @@
 namespace Poker {
     Card::Card() : fc{Face::None}, st{Suit::None} { }
     Card::Card(Face f, Suit s) : fc{f}, st{s} { }
-    Card::Card(const Card& card) : fc{card.face()}, st{card.suit()} { }
 
     Face Card::face() const { 
         if (fc == Face::None) throw std::bad_exception{};
@@ -16,18 +15,26 @@ namespace Poker {
         return st; 
     }
 
-    Card& Card::operator=(const Card& card) {
-        fc = card.face();
-        st = card.suit();
-        return *this;
-    }
+    bool Card::read_card(std::istream& in, Card &card) {
+        if (in.eof()) return false;
 
-    std::istream& operator>>(std::istream& in, Card &card) {
-        Face face = static_cast<Face>(in.get());
-        Suit suit = static_cast<Suit>(in.get());
+        //ignore leading whitespace
+        char c = in.get();
+        while(c == ' ') c = in.get();
+        if (in.eof()) return false;
+        if (c == '\n') return false;
 
-        if (face == Face::None) throw std::exception{};
-        if (suit == Suit::None) throw std::exception{};
+        Face face = static_cast<Face>(c);
+
+        c = in.get();
+
+        if (c == '\n') return false;
+        if (in.eof()) return false;
+
+        Suit suit = static_cast<Suit>(c);
+
+        if (face == Face::None) return false;
+        if (suit == Suit::None) return false;
 
         switch(face) {
             case Face::two:
@@ -44,7 +51,7 @@ namespace Poker {
             case Face::ace:
                 break;
             default:
-                throw std::exception{};
+                return false;
         }
 
         switch(suit) {
@@ -54,12 +61,11 @@ namespace Poker {
             case Suit::spades:
                 break;
             default:
-                throw std::exception{};
+                return false;
         }
 
         card = Card { face, suit };
-
-        return in;
+        return true;
     }
 
     std::ostream& operator<<(std::ostream& out, Card card) {

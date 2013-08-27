@@ -36,13 +36,12 @@ namespace Poker {
         public:
             Card();
             Card(Face,Suit);
-            Card(const Card&);
-            Card& operator=(const Card&);
             Face face() const;
             Suit suit() const;
+
+            static bool read_card(std::istream&, Card&);
     };
 
-    std::istream& operator>>(std::istream&, Card &);
     std::ostream& operator<<(std::ostream&, Card);
 
     class Hand {
@@ -55,8 +54,10 @@ namespace Poker {
             Hand(std::string);
             std::string player() const;
             void set_player(std::string);
-            std::vector<Card> cards() const;
+            const std::vector<Card>& cards() const;
             void add_card(Card);
+
+            static bool read_hand(std::istream&, Hand&);
     };
 
     std::istream& operator>>(std::istream&, Hand &);
