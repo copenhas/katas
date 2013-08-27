@@ -2,7 +2,7 @@ project(poker_tests)
 cmake_minimum_required(VERSION 2.8)
 
 if(APPLE)
-    set (CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
+    set (CMAKE_CXX_FLAGS "-g -std=c++11 -stdlib=libc++")
     add_definitions(-DGTEST_USE_OWN_TR1_TUPLE)
 endif()
 

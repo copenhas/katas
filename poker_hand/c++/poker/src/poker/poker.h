@@ -3,7 +3,8 @@
 #include <vector>
 
 namespace Poker {
-    enum class Face: char { 
+    enum class Face: char {
+        None = ' ',
         two = '2',
         three = '3',
         four = '4',
@@ -19,7 +20,8 @@ namespace Poker {
         ace = 'A'
     };
 
-    enum class Suit { 
+    enum class Suit: char {
+        None = ' ',
         clubs = 'C',
         diamonds = 'D',
         hearts = 'H',
@@ -32,6 +34,7 @@ namespace Poker {
             Suit st;
 
         public:
+            Card();
             Card(Face,Suit);
             Card(const Card&);
             Card& operator=(const Card&);
@@ -39,6 +42,7 @@ namespace Poker {
             Suit suit() const;
     };
 
+    std::istream& operator>>(std::istream&, Card &);
     std::ostream& operator<<(std::ostream&, Card);
 
     class Hand {
@@ -47,12 +51,15 @@ namespace Poker {
             std::vector<Card> _cards;
 
         public:
+            Hand();
             Hand(std::string);
             std::string player() const;
+            void set_player(std::string);
             std::vector<Card> cards() const;
             void add_card(Card);
     };
 
+    std::istream& operator>>(std::istream&, Hand &);
     std::ostream& operator<<(std::ostream&, Hand);
 
     void read_from_file(std::string file);
