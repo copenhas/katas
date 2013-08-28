@@ -21,10 +21,9 @@ namespace Poker {
         //ignore leading whitespace
         char c = in.get();
         while(c == ' ') c = in.get();
-        if (in.eof()) return false;
         if (c == '\n') return false;
 
-        Face face = static_cast<Face>(c);
+        Face face = Poker::char_to_face(c);
 
         c = in.get();
 
@@ -35,24 +34,6 @@ namespace Poker {
 
         if (face == Face::None) return false;
         if (suit == Suit::None) return false;
-
-        switch(face) {
-            case Face::two:
-            case Face::three:
-            case Face::four:
-            case Face::five:
-            case Face::six:
-            case Face::seven:
-            case Face::eight:
-            case Face::nine:
-            case Face::jack:
-            case Face::queen:
-            case Face::king:
-            case Face::ace:
-                break;
-            default:
-                return false;
-        }
 
         switch(suit) {
             case Suit::clubs:
@@ -68,8 +49,12 @@ namespace Poker {
         return true;
     }
 
+    bool operator<(const Card &c1, const Card &c2) {
+        return c1.face() < c2.face();
+    }
+
     std::ostream& operator<<(std::ostream& out, Card card) {
-        return out << static_cast<char>(card.face()) << static_cast<char>(card.suit());
+        return out << face_to_char(card.face()) << static_cast<char>(card.suit());
     }
 }
 

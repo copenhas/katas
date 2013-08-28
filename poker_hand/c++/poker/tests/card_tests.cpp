@@ -81,4 +81,12 @@ namespace CardTests {
         EXPECT_EQ(Face::two, c.face());
         EXPECT_EQ(Suit::spades, c.suit());
     }
+
+    TEST(Card, cards_are_comparable) {
+        Card two_of_hearts { Face::two, Suit::hearts };
+        Card jack_of_spades { Face::jack, Suit::spades };
+
+        EXPECT_TRUE(two_of_hearts < jack_of_spades);
+        EXPECT_FALSE(jack_of_spades < two_of_hearts);
+    }
 }

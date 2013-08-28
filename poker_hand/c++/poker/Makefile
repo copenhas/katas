@@ -1,6 +1,6 @@
 .PHONY: build tags
 
-all: build test
+all: build tags test
 
 build:
 	cmake --build build --target all
