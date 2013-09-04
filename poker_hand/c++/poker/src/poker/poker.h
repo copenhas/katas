@@ -3,7 +3,20 @@
 #include <vector>
 
 namespace Poker {
-    enum class Face: char {
+    enum class Rank : int {
+        no_rank = 0,
+        high_card = 1,
+        pair = 2,
+        two_pair = 3,
+        three_of_a_kind = 4,
+        straight = 5,
+        flush = 6,
+        full_house = 7,
+        four_of_a_kind = 8,
+        straight_flush = 9
+    };
+
+    enum class Face: int {
         None = 0,
         two = 2,
         three = 3,
@@ -52,6 +65,7 @@ namespace Poker {
     private:
         std::string _player;
         std::vector<Card> _cards;
+        Rank _rank;
 
     public:
         Hand();
@@ -59,8 +73,8 @@ namespace Poker {
         std::string player() const;
         void set_player(std::string);
         const std::vector<Card>& cards() const;
-        Card high_card() const;
         void add_card(Card);
+        Rank rank() const;
 
         static bool read_hand(std::istream&, Hand&);
     };
@@ -70,19 +84,29 @@ namespace Poker {
 
     void read_from_file(std::string file);
 
-    namespace Rank {
+    namespace Ranking {
         class HandRank {
         public:
-            virtual const std::string name();
-            virtual int value();
-            virtual bool matches(const Hand&);
+            virtual ~HandRank();
+            virtual const std::string name() const;
+            virtual Rank value() const;
+        };
+
+        HandRank CreateRank(const Hand &);
+
+        class NoRank: public HandRank {
+        public:
+            const std::string name() const;
+            Rank value() const;
         };
 
         class StraightFlush: public HandRank {
         public:
-            const std::string name();
-            int value();
-            bool matches(const Hand&);
+            StraightFlush(const Hand &);
+            const std::string name() const;
+            Rank value() const;
+
+            static bool matches(Hand &);
         };
     }
 }

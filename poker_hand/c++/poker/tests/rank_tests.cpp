@@ -2,7 +2,7 @@
 #include "poker.h"
 
 using namespace Poker;
-using namespace Poker::Rank;
+using namespace Poker::Ranking;
 using namespace std;
 
 namespace RankTests {

@@ -2,22 +2,21 @@
 #include "poker.h"
 
 namespace Poker {
-    Hand::Hand() { }
-    Hand::Hand(std::string player) :
-        _player{player}
-    { }
+    Hand::Hand() {
+        _rank = Rank::no_rank;
+    }
+
+    Hand::Hand(std::string player) : Hand() {
+        _player = player;
+    }
 
     std::string Hand::player() const { return _player; }
     void Hand::set_player(std::string name) { _player = name; }
     const std::vector<Card>& Hand::cards() const { return _cards; }
+    Rank Hand::rank() const { return _rank; }
 
     void Hand::add_card(Card c) {
         _cards.push_back(c);
-        std::sort(_cards.begin(), _cards.end());
-    }
-
-    Card Hand::high_card() const {
-        return _cards[_cards.size() - 1];
     }
 
     bool Hand::read_hand(std::istream& in, Hand& h) {

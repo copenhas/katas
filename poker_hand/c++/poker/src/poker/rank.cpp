@@ -4,10 +4,21 @@
 using namespace std;
 
 namespace Poker {
-    namespace Rank {
-        const std::string StraightFlush::name() { return "Straight Flush"; }
-        int StraightFlush::value() { return 9; }
-        bool StraightFlush::matches(const Hand &h) {
+    namespace Ranking {
+        HandRank CreateRank(Hand &h) {
+            if (StraightFlush::matches(h)) return StraightFlush{h};
+            return NoRank();
+        }
+
+        const std::string NoRank::name() const { return "illegal hand"; }
+        Rank NoRank::value() const { return Rank::no_rank; }
+
+        StraightFlush::StraightFlush(const Hand &h) {}
+
+        const std::string StraightFlush::name() const { return "Straight Flush"; }
+        Rank StraightFlush::value() const { return Rank::straight_flush; }
+
+        bool StraightFlush::matches(Hand &h) {
             return false;
         }
     }
