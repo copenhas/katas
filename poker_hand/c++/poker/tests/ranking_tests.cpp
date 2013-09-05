@@ -5,10 +5,8 @@ using namespace Poker;
 using namespace Poker::Ranking;
 using namespace std;
 
-namespace RankTests {
+namespace RankingTests {
     TEST(StraightFlush, matches_correctly) {
-        //HandRank *straightFlush = new StraightFlush();
-
         Hand hand { "player1" };
         hand.add_card({ Face::two, Suit::spades });
         hand.add_card({ Face::three, Suit::spades });
@@ -16,7 +14,6 @@ namespace RankTests {
         hand.add_card({ Face::five, Suit::spades });
         hand.add_card({ Face::six, Suit::spades });
 
-        //EXPECT_TRUE(straightFlush->matches(hand));
-        EXPECT_TRUE(false) << "not implemented";
+        EXPECT_EQ(Rank::straight_flush, hand.rank());
     }
 }

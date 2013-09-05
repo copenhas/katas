@@ -61,11 +61,25 @@ namespace Poker {
     bool operator<(const Card&, const Card&);
     std::ostream& operator<<(std::ostream&, Card);
 
+    class Score {
+    private:
+        Rank _rank;
+        std::vector<Card> _value;
+
+    public:
+        Score();
+        Score(Rank, std::vector<Card>);
+        Rank rank() const;
+        std::vector<Card> value() const;
+    };
+
+    bool operator<(Score&, Score&);
+
     class Hand {
     private:
         std::string _player;
         std::vector<Card> _cards;
-        Rank _rank;
+        Score _score;
 
     public:
         Hand();
@@ -84,29 +98,8 @@ namespace Poker {
 
     void read_from_file(std::string file);
 
+
     namespace Ranking {
-        class HandRank {
-        public:
-            virtual ~HandRank();
-            virtual const std::string name() const;
-            virtual Rank value() const;
-        };
-
-        HandRank CreateRank(const Hand &);
-
-        class NoRank: public HandRank {
-        public:
-            const std::string name() const;
-            Rank value() const;
-        };
-
-        class StraightFlush: public HandRank {
-        public:
-            StraightFlush(const Hand &);
-            const std::string name() const;
-            Rank value() const;
-
-            static bool matches(Hand &);
-        };
+        Score score(const Hand &);
     }
 }

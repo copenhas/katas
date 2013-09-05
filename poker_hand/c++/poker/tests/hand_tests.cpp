@@ -7,6 +7,25 @@ using namespace Poker::Ranking;
 using namespace std;
 
 namespace HandTests {
+    TEST(Hand, only_allows_5_cards) {
+        Hand hand { "player1" };
+        hand.add_card({ Face::two, Suit::spades });
+        hand.add_card({ Face::three, Suit::spades });
+        hand.add_card({ Face::four, Suit::spades });
+        hand.add_card({ Face::five, Suit::spades });
+        hand.add_card({ Face::six, Suit::spades });
+
+        try {
+        hand.add_card({ Face::seven, Suit::spades });
+        }
+        catch(...) {
+            EXPECT_TRUE(true);
+            return;
+        }
+
+        EXPECT_TRUE(false) << "hand should blow up when you add more then 5 cards";
+    }
+
     TEST(Hand, prints_player_and_hand) {
         basic_ostringstream<char> oss;
 
@@ -73,22 +92,14 @@ namespace HandTests {
     }
 
     TEST(Hand, is_given_a_rank_after_5_cards) {
-        std::basic_istringstream<char> iss { "copenhaver: 2H 3S 4D 5C 6H\n"
-                                             "rhoten: 7H 8S 9D JC QH\n" };
+        Hand hand { "player1" };
 
-        std::vector<Hand> hands { };
+        hand.add_card({ Face::two, Suit::spades });
+        hand.add_card({ Face::three, Suit::spades });
+        hand.add_card({ Face::four, Suit::spades });
+        hand.add_card({ Face::five, Suit::spades });
+        hand.add_card({ Face::six, Suit::spades });
 
-        Hand h;
-        while(Hand::read_hand(iss, h)) {
-            hands.push_back(h);
-        }
-
-        ASSERT_EQ(2, hands.size());
-
-        EXPECT_EQ("copenhaver", hands[0].player());
-        EXPECT_EQ(5, hands[0].cards().size());
-
-        EXPECT_EQ("rhoten", hands[1].player());
-        EXPECT_EQ(5, hands[1].cards().size());
+        EXPECT_NE(Rank::no_rank, hand.rank());
     }
 }

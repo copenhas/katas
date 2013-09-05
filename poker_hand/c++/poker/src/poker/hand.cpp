@@ -3,7 +3,7 @@
 
 namespace Poker {
     Hand::Hand() {
-        _rank = Rank::no_rank;
+        _score = Score{Rank::no_rank, std::vector<Card>()};
     }
 
     Hand::Hand(std::string player) : Hand() {
@@ -13,10 +13,16 @@ namespace Poker {
     std::string Hand::player() const { return _player; }
     void Hand::set_player(std::string name) { _player = name; }
     const std::vector<Card>& Hand::cards() const { return _cards; }
-    Rank Hand::rank() const { return _rank; }
+    Rank Hand::rank() const { return _score.rank(); }
 
     void Hand::add_card(Card c) {
+        if (_cards.size() == 5) throw std::bad_exception();
+
         _cards.push_back(c);
+
+        if (_cards.size() == 5) {
+            _score = Ranking::score(*this);
+        }
     }
 
     bool Hand::read_hand(std::istream& in, Hand& h) {
