@@ -34,7 +34,7 @@ defmodule PokerTest do
                                            {6, :hearts},
                                            {7, :hearts}]}
 
-    assert rank == {:straight_flush, 7}
+    assert rank == {:straight_flush, [7, 6, 5, 4, 3]}
   end
 
   test "ranking can match a straight" do
@@ -44,7 +44,7 @@ defmodule PokerTest do
                                            {6, :clubs},
                                            {7, :hearts}]}
 
-    assert rank == {:straight, 7}
+    assert rank == {:straight, [7, 6, 5, 4, 3]}
   end
 
   test "ranking can match a straight with ace at the beginning" do
@@ -54,7 +54,7 @@ defmodule PokerTest do
                                            {5, :clubs},
                                            {14, :hearts}]}
 
-    assert rank == {:straight, 7}
+    assert rank == {:straight, [14, 5, 4, 3, 2]}
   end
 
   test "ranking can match a flush" do
@@ -64,6 +64,6 @@ defmodule PokerTest do
                                            {6, :clubs},
                                            {10, :clubs}]}
 
-    assert rank == {:flush, 10}
+    assert rank == {:flush, [10, 8, 6, 4, 3]}
   end
 end
