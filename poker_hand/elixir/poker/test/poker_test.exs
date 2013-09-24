@@ -47,6 +47,16 @@ defmodule PokerTest do
     assert rank == {:straight, 7}
   end
 
+  test "ranking can match a straight with ace at the beginning" do
+    rank = Poker.Ranking.rank {"player2", [{2, :clubs},
+                                           {3, :hearts},
+                                           {4, :spades},
+                                           {5, :clubs},
+                                           {14, :hearts}]}
+
+    assert rank == {:straight, 7}
+  end
+
   test "ranking can match a flush" do
     rank = Poker.Ranking.rank {"player2", [{3, :clubs},
                                            {4, :clubs},

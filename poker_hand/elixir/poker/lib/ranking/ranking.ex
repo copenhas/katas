@@ -8,24 +8,27 @@ defmodule Poker.Ranking do
   end
 
   defp do_rank(hand) do
-    nil
-     |> straight_flush?(hand)
-     |> flush?(hand)
-     |> straight?(hand)
-     |> no_rank?(hand)
+    find_rank(hand, [
+      &straight_flush?/1,
+      &flush?/1,
+      &straight?/1
+    ])
   end
 
-  defp no_rank?(nil, hand) do
-    {:no_rank, nil}
+  defp find_rank(hand, [ ranker | funcs ]) do
+    case ranker.(hand) do
+      nil -> find_rank(hand, funcs)
+      found -> found
+    end
   end
 
-  defp no_rank?(rank, hand) when is_tuple rank do
-    rank
+  defp find_rank(hand, []) do
+    {:high_card, hand}
   end
 
-  defp straight_flush?(nil, hand) do
-    is_flush = flush?(nil, hand)
-    is_straight = straight?(nil, hand)
+  defp straight_flush?(hand) do
+    is_flush = flush?(hand)
+    is_straight = straight?(hand)
 
     case {is_flush, is_straight} do
       {nil, _} -> nil
@@ -35,11 +38,7 @@ defmodule Poker.Ranking do
     end
   end
 
-  defp straight_flush?(rank, hand) do
-    rank
-  end
-
-  defp flush?(nil, hand) do
+  defp flush?(hand) do
     [first | rest] = Enum.map(hand, fn({_face, suit}) -> suit end)
 
     if Enum.all?(rest, &1 == first) do
@@ -48,11 +47,7 @@ defmodule Poker.Ranking do
     end
   end
 
-  defp flush?(rank, hand) do
-    rank
-  end
-
-  defp straight?(nil, hand) do
+  defp straight?(hand) do
     sequential = Enum.map(hand, fn({face, _suit}) -> face end)
                   |> Enum.chunks(2, 1)
                   |> Enum.reduce(true, fn([first, second], acc) ->
@@ -63,9 +58,5 @@ defmodule Poker.Ranking do
       {face, _suit} = Enum.first hand
       {:straight, face}
     end
-  end
-
-  defp straight?(rank, hand) do
-    rank
   end
 end
