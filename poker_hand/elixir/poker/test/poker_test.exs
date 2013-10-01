@@ -27,8 +27,13 @@ defmodule PokerTest do
 
   end
 
+  test "will print the winner and rank" do
+    winner = Poker.simulate "player1: 2C 8D KS TH 6S  player2: 3C 3H 4S 8C AH"
+    assert winner == "player2 won with a pair"
+  end
+
   test "ranking can match a straight flush" do
-    rank = Poker.Ranking.rank {"player2", [{3, :hearts},
+    {_, _, rank} = Poker.Ranking.rank {"player2", [{3, :hearts},
                                            {4, :hearts},
                                            {5, :hearts},
                                            {6, :hearts},
@@ -38,7 +43,7 @@ defmodule PokerTest do
   end
 
   test "ranking can match a straight" do
-    rank = Poker.Ranking.rank {"player2", [{3, :clubs},
+    {_, _, rank} = Poker.Ranking.rank {"player2", [{3, :clubs},
                                            {4, :hearts},
                                            {5, :spades},
                                            {6, :clubs},
@@ -48,7 +53,7 @@ defmodule PokerTest do
   end
 
   test "ranking can match a straight with ace at the beginning" do
-    rank = Poker.Ranking.rank {"player2", [{2, :clubs},
+    {_, _, rank} = Poker.Ranking.rank {"player2", [{2, :clubs},
                                            {3, :hearts},
                                            {4, :spades},
                                            {5, :clubs},
@@ -58,12 +63,32 @@ defmodule PokerTest do
   end
 
   test "ranking can match a flush" do
-    rank = Poker.Ranking.rank {"player2", [{3, :clubs},
+    {_, _, rank} = Poker.Ranking.rank {"player2", [{3, :clubs},
                                            {4, :clubs},
                                            {8, :clubs},
                                            {6, :clubs},
                                            {10, :clubs}]}
 
     assert rank == {:flush, [10, 8, 6, 4, 3]}
+  end
+
+  test "ranking can match a high card" do
+    {_, _, rank} = Poker.Ranking.rank {"player2", [{3, :clubs},
+                                           {4, :clubs},
+                                           {8, :diamonds},
+                                           {6, :clubs},
+                                           {10, :hearts}]}
+
+    assert rank == {:high_card, [10, 8, 6, 4, 3]}
+  end
+
+  test "ranking can match a pair" do
+    {_, _, rank} = Poker.Ranking.rank {"player2", [{3, :clubs},
+                                           {4, :clubs},
+                                           {8, :diamonds},
+                                           {6, :clubs},
+                                           {3, :hearts}]}
+
+    assert rank == {:pair, [3, 8, 6, 4]}
   end
 end
